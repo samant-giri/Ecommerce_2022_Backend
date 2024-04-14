@@ -21,6 +21,7 @@ config({
 const port = process.env.PORT || 4000;
 const mongoURI = process.env.MONGO_URI || "";
 const stripeKey = process.env.STRIPE_KEY || "";
+const url = process.env.FRONTEND_URL || "";
 
 connectDB(mongoURI);
 
@@ -31,7 +32,14 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: [url],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 
 app.get("/", (req, res) => {
   res.send("API Working with /api/v1");
